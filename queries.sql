@@ -73,3 +73,37 @@ insert into Students (surname, given_name, date_of_birth, parent_id)
 
 insert into Students (surname, given_name, date_of_birth, parent_id)
     values ('Lim', 'Mary', '1990-10-12', 2);
+
+-- To delete
+delete from Parents where parent_id = 1;
+
+create table Sessions (
+    session_id int unsigned auto_increment primary key,
+    session_date datetime not null,
+    venue_id tinyint unsigned not null,
+    foreign key (venue_id) references Venues(venue_id)
+) engine = innodb;
+
+-- delete rules
+-- to ber inserted at the foreign key
+-- eg foreign key (venue_id) references Venues(venue_id) on delete restrict
+-- most useful is on delete cascade BUT must be very careful, default is on delete restrict, 
+on delete restrict
+on delete cascade
+on delete set null
+
+insert into Sessions(session_date, venue_id)
+    values ('2020-12-31 13:00:00', 1);
+
+insert into Sessions(session_date, venue_id)
+    values ('2020-12-31 13:00:00', 2);
+
+-- Creating table with ONLY foreign keys
+create table CertificateStudent (
+    certificate_student_id int unsigned auto_increment primary key,
+    student_id int unsigned,
+    certificate_id int unsigned,
+    award_date date not null,
+    foreign key (student_id) references Students(student_id),
+    foreign key (certificate_id) references Certificates(certificate_id)
+) engine = innodb;
