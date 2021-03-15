@@ -27,8 +27,13 @@ insert into Parents (surname, given_name, email)
     values ('Phua', 'Chua Kang', 'chukang@phua.com.sg');
 
 insert into Parents (surname, given_name, email)
- values ('Lim', 'Megan', 'meganlim@fake.com.sg');
+    values ('Lim', 'Megan', 'meganlim@fake.com.sg');
 
+insert into Parents (surname, given_name, email)
+    values ('Tan', 'Arthur', 'arthurtan@fake.com.sg');
+
+insert into Parents (surname, given_name, email)
+    values ('Lee', 'Johnson', 'johnson@lee.com.sg');
 /* see all the rows in a table */
 select * from Parents;
 
@@ -92,11 +97,11 @@ on delete restrict
 on delete cascade
 on delete set null
 
-insert into Sessions(session_date, venue_id)
-    values ('2020-12-31 13:00:00', 1);
+insert into Sessions(session_date, venue_id, coach_id)
+    values ('2020-12-31 13:00:00', 1,2);
 
-insert into Sessions(session_date, venue_id)
-    values ('2020-12-31 13:00:00', 2);
+insert into Sessions(session_date, venue_id, coach_id)
+    values ('2020-12-31 13:00:00', 2,1);
 
 -- Creating table with ONLY foreign keys
 create table CertificateStudent (
@@ -107,3 +112,39 @@ create table CertificateStudent (
     foreign key (student_id) references Students(student_id),
     foreign key (certificate_id) references Certificates(certificate_id)
 ) engine = innodb;
+
+insert into CertificateStudent(student_id, certificate_id, award_date)
+    values (1,2,'2021-02-01');
+
+-- Adding column to a table (alter table)
+alter table Students add gender varchar(1) not null;
+
+-- Renaming a column
+alter table Students rename column surname to last_name;
+alter table Students rename column given_name to first_name;
+
+-- Modify definition of column
+alter table Students modify gender varchar(1) null;
+
+-- Deleting a table (called fake) (assuming it has no relations, e.g. foreign keys)
+drop table Fake;
+
+-- Deleting row
+delete from Parents where parent_id = 2;
+
+-- Modifying a row
+update Students set first_name = "Peter" where student_id = 1;
+
+-- Adding in a foreign key after the table exists (not recommended)
+-- 1. Create new table
+create table Coaches (
+    coach_id tinyint unsigned auto_increment primary key,
+    coach_name varchar(100) not null
+) engine=innodb;
+
+-- 2. Add in the new column
+alter table Sessions add coach_id tinyint unsigned not null;
+
+-- 3. Add in foreign key definition
+alter table Sessions add foreign key(coach_id) references Coaches(coach_id);
+
