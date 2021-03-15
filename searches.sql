@@ -85,6 +85,20 @@ WHERE customers.country = "france"
 ORDER BY  customers.customerName
 LIMIT 3;
 
+-----------------|
+----- DATES -----|
+-----------------|
+-- Find orders where orderdate is earlier than 9 Jun 2003
+SELECT * FROM orders where orderDate < "2003-06-09"
+
+-- Find all orders made in year 2003
+SELECT *
+FROM orders
+WHERE YEAR(orderDate) = 2003;
+
+-- Shows current date on server
+SELECT CURRDATE()
+
 -- HANDS ON
 -- Q1: Find all the offices and display only their city, phone and country.
 select city, phone, country from offices;
