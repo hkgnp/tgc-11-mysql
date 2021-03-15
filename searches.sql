@@ -86,13 +86,13 @@ ORDER BY  customers.customerName
 LIMIT 3;
 
 -- HANDS ON
--- Q1
+-- Q1: Find all the offices and display only their city, phone and country.
 select city, phone, country from offices;
 
--- Q2
+-- Q2: Find all rows in the orders table that mentions FedEx in the comments.
 SELECT * FROM orders where comments like "%FedEx%";
 
--- Q3
+-- Q3: Display all the orders bought by the customer with the customer number 124, along with the customer name, the contact's first name and contact's last name.
 SELECT orders.customerNumber,
          customerName,
          contactFirstName,
@@ -108,24 +108,22 @@ JOIN customers
     ON customers.customerNumber = orders.customerNumber
 WHERE orders.customerNumber = 124
 
--- Q4
+-- Q4: Show the contact first name and contact last name of all customers in descending order by the customer's name.
 SELECT customerName,
          contactFirstName,
          contactLastName
 FROM customers
 ORDER BY  customerName DESC;
 
--- Q5
+-- Q5: Find all sales rep who are in office code 1, 2 or 3 and their first name or last name contains the substring 'son'.
 SELECT *
 FROM employees
 WHERE jobTitle = "Sales Rep"
-        AND (officeCode = 1
-        OR officeCode = 2
-        OR officeCode = 3)
+        AND (officeCode in (1,2,3))
         AND (firstName LIKE "%son%"
         OR lastName LIKE "%son%")
 
--- Q6
+-- Q6: Show the name of the product, together with the order details,  for each order line from the orderdetails table.
 SELECT orderNumber,
          quantityOrdered,
          priceEach,
@@ -135,3 +133,19 @@ SELECT orderNumber,
 FROM orderdetails
 JOIN products
     ON orderdetails.productCode = products.productCode;
+
+-- Q7: Show how many employees are there for each state in the USA.
+SELECT state, count(*)
+FROM employees
+JOIN offices
+    ON employees.officeCode = offices.officeCode
+WHERE country = "usa"
+GROUP BY  state;
+
+-- Q8: From the payments table, display the average amount spent by each customer. Display the name of the customer as well.
+SELECT customerName, AVG(amount)
+FROM payments
+JOIN customers
+    ON payments.customerNumber = customers.customerNumber
+GROUP BY customerName
+
