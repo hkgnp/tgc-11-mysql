@@ -66,4 +66,72 @@ JOIN employees
     ON customers.salesRepEmployeeNumber = employees.employeeNumber
 JOIN offices
     ON employees.officeCode = offices.officeCode
-WHERE customers.city = "Paris";
+WHERE customers.city = "Paris" or customers.city = "san francisco";
+
+-- Join more than 2 offices, project some columns, and include filter, order by name, and then limit to the first 3 results
+SELECT customerName,
+         customers.city,
+         firstName,
+         lastName,
+         jobTitle,
+         offices.city
+FROM customers
+JOIN employees
+    ON customers.salesRepEmployeeNumber = employees.employeeNumber
+JOIN offices
+    ON employees.officeCode = offices.officeCode
+WHERE customers.country = "france"
+        OR customers.country = "usa"
+ORDER BY  customers.customerName
+LIMIT 3;
+
+-- HANDS ON
+-- Q1
+select city, phone, country from offices;
+
+-- Q2
+SELECT * FROM orders where comments like "%FedEx%";
+
+-- Q3
+SELECT orders.customerNumber,
+         customerName,
+         contactFirstName,
+         contactLastName,
+         orderNumber,
+         orderDate,
+         requiredDate,
+         shippedDate,
+         status,
+         comments
+FROM orders
+JOIN customers
+    ON customers.customerNumber = orders.customerNumber
+WHERE orders.customerNumber = 124
+
+-- Q4
+SELECT customerName,
+         contactFirstName,
+         contactLastName
+FROM customers
+ORDER BY  customerName DESC;
+
+-- Q5
+SELECT *
+FROM employees
+WHERE jobTitle = "Sales Rep"
+        AND (officeCode = 1
+        OR officeCode = 2
+        OR officeCode = 3)
+        AND (firstName LIKE "%son%"
+        OR lastName LIKE "%son%")
+
+-- Q6
+SELECT orderNumber,
+         quantityOrdered,
+         priceEach,
+         orderLineNumber,
+         orderdetails.productCode,
+         productName
+FROM orderdetails
+JOIN products
+    ON orderdetails.productCode = products.productCode;
