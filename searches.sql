@@ -99,7 +99,34 @@ WHERE YEAR(orderDate) = 2003;
 -- Shows current date on server
 SELECT CURRDATE()
 
--- HANDS ON
+-------------------------------|
+----- AGGREGATE FUNCTIONS -----|
+-------------------------------|
+-- Find out the sum of a particular column from a table
+SELECT SUM(creditLimit) FROM customers;
+
+-- Find out the average of a particular column from a table
+SELECT AVG(creditLimit) FROM customers;
+
+-- Find out the average of a particular FILTERED column from a table
+SELECT AVG(creditLimit) FROM customers where country = "USA"
+
+-- Find out the max of a particular column
+SELECT MAX(creditLimit) FROM customers;
+
+-- Find out the min of a particular column
+SELECT MIN(creditLimit) FROM customers;
+
+-- Find out the distinct values in a table
+SELECT distinct(country) from customers
+
+SELECT country, AVG(creditLimit)
+FROM customers
+GROUP BY  country
+
+-------------------------------|
+----------- HANDS ON ----------|
+-------------------------------|
 -- Q1: Find all the offices and display only their city, phone and country.
 select city, phone, country from offices;
 
@@ -162,4 +189,34 @@ FROM payments
 JOIN customers
     ON payments.customerNumber = customers.customerNumber
 GROUP BY customerName
+
+-- Q9: From the payments table, display the average amount spent by each customer but only if the customer has spent a minimum of 10,000 dollars.
+SELECT payments.customerNumber,
+         customerName,
+         AVG(amount) as "Average Amount Spent"
+FROM payments
+JOIN customers
+    ON payments.customerNumber = customers.customerNumber
+GROUP BY  customerNumber, payments.customerNumber
+HAVING AVG(amount) > 10000;
+
+-- 10: For each product, display how many times it was ordered, and display the results with the most orders first and only show the top ten.
+SELECT productName, count(*)
+FROM orderdetails
+JOIN products ON orderdetails.productCode = products.productCode
+GROUP BY  productName
+ORDER BY count(*) desc
+LIMIT 10;
+
+-- 11: Display all orders made between Jan 2003 and Dec 2003
+SELECT *
+FROM orders
+WHERE YEAR(orderDate) = 2003;
+
+--12: Display all the number of orders made, per month, between Jan 2003 and Dec 2003
+SELECT MONTH(orderDate), count(*)
+FROM orders
+WHERE YEAR(orderDate) = 2003
+GROUP BY MONTH(orderDate)
+
 
