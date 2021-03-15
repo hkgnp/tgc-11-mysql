@@ -27,6 +27,8 @@ create table Employee_Taskforce (
     foreign key (taskforce_id) references Taskforces(taskforce_id)
 ) engine=innodb;
 
+alter table Employee_Taskforce add role varchar(100) not null;
+
 create table Addresses (
     employee_id int unsigned,
     foreign key (employee_id) references Employees(employee_id),
@@ -46,6 +48,29 @@ create table Employee_Supervisor (
     foreign key (supervisor_id) references Employees(employee_id)
 ) engine=innodb;
 
+-- INSERTING ROWS
+insert into Departments(name)
+    values ('IT Support');
 
+insert into Employees(surname, given_name, department_id, date_of_employment)
+    values("Tan", "Ryan", 1, "2020-01-01 00:00:00");
+
+insert into Taskforces(name)
+    values('Staff Welfare');
+
+insert into Employee_Taskforce(role, employee_id, taskforce_id)
+    values('President', 1, 1)
+
+insert into Employees(surname, given_name, department_id, date_of_employment)
+    values("Lee", "Peter", 1, "1980-01-01 00:00:00");
+
+insert into Addresses(employee_id, blk_number, street,unit_code,postal_code)
+    values(1, "123A", "Jalan Tua Tau", "#01-01", "123123");
+
+insert into Addresses(employee_id, blk_number, street,unit_code,postal_code)
+    values(2, "5", "Henderson Road", "", "00005");
+
+insert into Employee_Supervisor(employee_id, supervisor_id)
+    values(1, 2);
 
 

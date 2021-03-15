@@ -145,6 +145,6 @@ create table Coaches (
 -- 2. Add in the new column
 alter table Sessions add coach_id tinyint unsigned not null;
 
--- 3. Add in foreign key definition
+-- 3. Add in foreign key definition (there must not be any rows already created that do not have the foreign key, if not there will be an error)
 alter table Sessions add foreign key(coach_id) references Coaches(coach_id);
 
