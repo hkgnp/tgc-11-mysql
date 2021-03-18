@@ -184,11 +184,11 @@ WHERE country = "usa"
 GROUP BY  state;
 
 -- Q8: From the payments table, display the average amount spent by each customer. Display the name of the customer as well.
-SELECT customerName, AVG(amount)
+SELECT customerName, customers.customerNumber AVG(amount)
 FROM payments
 JOIN customers
     ON payments.customerNumber = customers.customerNumber
-GROUP BY customerName
+GROUP BY customerName, customers.customerNumber
 
 -- Q9: From the payments table, display the average amount spent by each customer but only if the customer has spent a minimum of 10,000 dollars.
 SELECT payments.customerNumber,
@@ -201,10 +201,10 @@ GROUP BY  customerNumber, payments.customerNumber
 HAVING AVG(amount) > 10000;
 
 -- 10: For each product, display how many times it was ordered, and display the results with the most orders first and only show the top ten.
-SELECT productName, count(*)
+SELECT productName, productCode, count(*)
 FROM orderdetails
 JOIN products ON orderdetails.productCode = products.productCode
-GROUP BY  productName
+GROUP BY  productName, productCode
 ORDER BY count(*) desc
 LIMIT 10;
 
@@ -212,6 +212,11 @@ LIMIT 10;
 SELECT *
 FROM orders
 WHERE YEAR(orderDate) = 2003;
+
+-- Display all orders made between Jun 2003 to May 2004
+SELECT *
+FROM orders
+WHERE YEAR(orderDate) >= "2003-06-01" AND YEAR(orderDate) <= "2004-05-31"
 
 --12: Display all the number of orders made, per month, between Jan 2003 and Dec 2003
 SELECT MONTH(orderDate), count(*)
