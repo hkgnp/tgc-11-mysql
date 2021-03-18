@@ -50,10 +50,13 @@ HAVING SUM(Total) > 500;
 
 -- 9 - Using the Invoice table, show the average payment made for each customer, but only for customer reside in Germany and only if that customer has paid more than 100 in total
 
-SELECT CustomerId, BillingCountry, SUM(Total)
+SELECT Invoice.CustomerId, AVG(Invoice.Total), SUM(Invoice.Total), Customer.Country
 FROM Invoice
-GROUP BY CustomerId, BillingCountry
-HAVING SUM(Total) > 40;
+JOIN Customer
+ON Invoice.CustomerId = Customer.CustomerId
+WHERE Customer.Country = "Germany"
+GROUP BY Invoice.CustomerId, Customer.Country
+HAVING SUM(Invoice.Total) > 10;
 
 -- 10 - Display the average length of Jazz song (that is, the genre of the song is Jazz) for each album
 
@@ -62,4 +65,4 @@ FROM Track
 JOIN Genre ON Track.GenreId = Genre.GenreId
 JOIN Album on Track.AlbumId = Album.AlbumId
 WHERE Genre.Name = "Jazz"
-GROUP BY AlbumId;
+GROUP BY Track.AlbumId, Album.Title;
