@@ -1,0 +1,38 @@
+{{#extends 'base'}} {{#block 'head'}}All Actors/Actresses{{/block}}
+{{#block 'content'}}
+
+<form method="GET">
+    <label class="form-label">Title</label>
+    <input type="text" name="title" value="{{searchParams.title}}"/>
+        <label class="form-label">Release Year</label>
+    <input type="text" name="release_year" value="{{searchParams.release_year}}"/>
+    <input type="submit" value="Submit" class="btn btn-primary"/>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Title</th>
+            <th scope="col">Description</th>
+            <th scope="col">Release Year</th>
+            <th scope="col">Language</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each films}}
+        <tr>
+            <th scope="row">{{this.film_id}}</th>
+            <td>{{this.title}}</td>
+            <td>{{this.description}}</td>
+            <td>{{this.release_year}}</td>
+            <td>{{this.name}}</td>
+            {{!-- <td><a href="/actors/{{this.actor_id}}/update" class="btn btn-primary">Edit</a></td>
+            <td><a href="/actors/{{this.actor_id}}/delete" class="btn btn-danger">Delete</a></td> --}}
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+{{/block}}
+{{/extends}}

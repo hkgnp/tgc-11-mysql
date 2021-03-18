@@ -93,7 +93,7 @@ require("handlebars-helpers")({ handlebars: hbs.handlebars });
     })
 
     app.get('/films/create', async (req, res) => {
-        const [languages] = await connection.execute("SELECT * FROM language");
+        let [languages] = await connection.execute("SELECT * FROM language");
         const [actors] = await connection.execute("SELECT * FROM actor");
 
         res.render('film_create', {
@@ -104,11 +104,25 @@ require("handlebars-helpers")({ handlebars: hbs.handlebars });
 
     app.post('/films/create', async (req, res) => {
         const { title, description, release_year, original_language_id, language_id, rental_duration, rental_rate, length, replacement_cost } = req.body;
-        const query = "INSERT INTO film (title, description, release_year, original_language_id, language_id, rental_duration, rental_rate, length, replacement_cost) VALUES (?,?,?,?,?,?,?,?,?)"
+        const query = `INSERT INTO film (title, description, release_year, original_language_id, language_id, rental_duration, rental_rate, length, replacement_cost) VALUES (?,?,?,?,?,?,?,?,?)`
 
         await connection.execute(query, [
-            title, description, release_year, original_language_id, language_id, rental_duration, rental_rate, length, replacement_cost
-        ])
+            title, description, release_year, original_language_id, language_id, rental_duration, rental_rate, length, replacement_cost])
+
+        // if (req.body.actors) {
+        //     let actors = Array.isArray(req.body.actors) ? req.body.actors : [req.body.actors];
+        //     for (let a of actors) {
+        //         connection.execute("INSERT INTO film_actor (actor_id, film_id) VALUES (?,?)", [a, results.insertId])
+        //     }
+        // }
+
+        if (req.body.actors) {
+            let actors = Array.isArray(req.body.actors) ? req.body.actors : [req.body.actors];
+            for (let a of actors) {
+                connection.execute("INSERT INTO film_actor (actor_id, film_id) VALUES (?, ?)", [a, results.insertId])
+            }
+        }
+
 
         res.send("New film has been added.");
 
@@ -118,11 +132,14 @@ require("handlebars-helpers")({ handlebars: hbs.handlebars });
         const query = "SELECT * FROM film where film_id = ?";
         const [films] = await connection.execute(query, [req.params.film_id]);
         const film = films[0];
+        const [actors] = await connection.execute("SELECT * from actor");
+        const [actorsinFilm] = await connection.execute("SELECT actor_id from film_actor WHERE film_id=?", [req.params.film_id])
         const [languages] = await connection.execute("SELECT * FROM language");
 
         res.render('film_update', {
             'film': film,
-            'languages': languages
+            'languages': languages,
+            'actors': actorsinFilm
         })
     })
 
@@ -139,6 +156,30 @@ require("handlebars-helpers")({ handlebars: hbs.handlebars });
 
         res.send("Film has been updated.");
     })
+
+    app.get('/films', async (req, res) => {
+
+        let query = 'SELECT * from film JOIN language on film.language_id = language.language_id WHERE 1';
+        let bindings = [];
+
+        if (req.query.title) {
+            query += " AND title LIKE ?";
+            bindings.push("%" + req.query.title + "%")
+        }
+
+        if (req.query.release_year) {
+            query += " AND release_year = ?";
+            bindings.push(req.query.release_year)
+        }
+
+        const [films] = await connection.execute(query, bindings);
+
+        res.render('films', {
+            'films': films,
+            'searchParams': req.query
+        })
+    })
+
 })();
 
 app.listen(3000, () => {

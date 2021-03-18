@@ -1,7 +1,7 @@
-{{#extends 'base'}} {{#block 'head'}}Creator New Film{{/block}}
+{{#extends 'base'}} {{#block 'head'}}Create New Film{{/block}}
 {{#block 'content'}}
 
-<h1>Creator New Film</h1>
+<h1>Create New Film</h1>
 <form method="POST">
     <div>
         <label class="form-label">Title</label>
@@ -31,18 +31,33 @@
         <label class="form-label">Replacement Cost</label>
         <input type="text" class="form-control" name="replacement_cost" />
         <label class="form-label">Actors</label>
-        <select class="form-control" name="language_id">
+        <select class="form-control" name="actors" id="actors">
             {{#each actors}}
-            <option value="{{this.actor_id}}"">{{this.first_name}} {{this.last_name}}</option>
+            <option value="{{this.actor_id}}">{{this.first_name}} {{this.last_name}}</option>
             {{/each}}
         </select>
     </div>
     <div>
         <input type="submit" value="Submit Film" class="mt-3 btn btn-primary" />
-
     </div>
 </form>
 
+{{#block 'css'}}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css"
+    integrity="sha512-nMNlpuaDPrqlEls3IX/Q56H36qvBASwb3ipuo3MxeWbsQB1881ox0cRv7UPTgBlriqoynt35KjEwgGUeUXIPnw=="
+    crossorigin="anonymous" />
+{{/block}}
+
+{{#block 'js'}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"
+    integrity="sha512-2ImtlRlf2VVmiGZsjm9bEyhjGW4dU7B6TNwh/hx/iSByxNENtj3WVE6o/9Lj4TJeVXPi4bnOIMXFIJJAeufa0A=="
+    crossorigin="anonymous"></script>
+<script>
+    (document).ready(function() {
+    $('#actors').select2();
+    });
+</script>
+{{/block}}
 
 {{/block}}
 {{/extends}}
