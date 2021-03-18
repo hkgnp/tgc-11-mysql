@@ -1,0 +1,26 @@
+{{#extends 'base'}} {{#block 'head'}}All Actors/Actresses{{/block}}
+{{#block 'content'}}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">First Name</th>
+            <th scope="col">Last Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each actors}}
+        <tr>
+            <th scope="row">{{this.actor_id}}</th>
+            <td>{{this.first_name}}</td>
+            <td>{{this.last_name}}</td>
+            <td><a href="/actors/{{this.actor_id}}/update" class="btn btn-primary">Edit</a></td>
+            <td><a href="/actors/{{this.actor_id}}/delete" class="btn btn-danger">Delete</a></td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+{{/block}}
+{{/extends}}
